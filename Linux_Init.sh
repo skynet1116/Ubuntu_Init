@@ -22,41 +22,6 @@
 Sources=$(cat /etc/issue |sed -n "1,1p"| awk '{print $2}'|cut -d '.' -f 1,2)
 mkdir Backup
 
-#gsettings set com.canonical.Unity.Launcher launcher-position Bottom
-if [ "${Sources}" == "16.04" ];then
-	test -f sources.list && result_0="y"
-	if [ "${result_0}" == "y" ];then
-		echo "Begin copy"
-		sudo cp /etc/apt/sources.list Backup/sources.list
-		sudo cp sources.list /etc/apt/sources.list
-	else
-		echo -e "\033[41;37m The sources file which contains USTC sources does not exist! \033[0m"
-		echo -e "\033[41;37m Please check whether the file in the warehouse catalog is complete. \033[0m"
-		echo -e "\033[41;37m (包含中科大的源文件不存在!请检查仓库目录下文件是否完整.) \033[0m"
-		echo -e "Coutinue?(Y/n) :\c"
-		read  yn
-		if [ "${yn}" == "n" ] || [ "${yn}" == "N" ]; then
-			exit 0;
-		fi
-	fi
-elif [ "${Sources}" == "14.04" ];then
-	test -f sources14.04.list && result_0="y"
-	if [ "${result_0}" == "y" ];then
-        	echo "Begin copy"
-        	sudo cp /etc/apt/sources.list Backup/sources.list
-        	sudo cp sources14.04.list /etc/apt/sources.list
-	else
-        	echo -e "\033[41;37m The sources file which contains 163 sources does not exist! \033[0m"
-        	echo -e "\033[41;37m Please check whether the file in the warehouse catalog is complete. \033[0m"
-        	echo -e "\033[41;37m (包含163的源文件不存在!请检查仓库目录下文件是否完整.) \033[0m"
-        	echo -e "Coutinue?(Y/n) :\c"
-        	read  yn
-        	if [ "${yn}" == "n" ] || [ "${yn}" == "N" ]; then
-                	exit 0;
-        	fi
-	fi
-fi
-
 sudo rm /var/lib/apt/lists/lock
 sudo rm /var/lib/dpkg/lock
 sudo apt-get autoclean
@@ -96,19 +61,11 @@ read editer
 
 ##Download softwares
 sudo apt-get install -y vim
-sudo apt-get install -y openjdk-8*
 sudo add-apt-repository -y ppa:plushuang-tw/uget-stable
 sudo apt-get update
 sudo apt-get -y install uget
 sudo apt-get install -y aria2i
 
-# optional, but recommended
-sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys BA300B7755AFCFAE
-# add Typora's repository
-sudo add-apt-repository 'deb http://typora.io linux/'
-sudo apt-get update
-# install typora
-sudo apt-get -y install typora
 
 if [ "${YN}" == "1" ] ; then
 	sudo apt-get remove -y fcitx*
@@ -134,43 +91,6 @@ fi
 
 if [ "${Docky}" == "1" ];then
 	sudo apt-get -y install docky
-fi
-
-sudo apt-get purge -y unity-webapps-common
-
-sudo add-apt-repository -y ppa:fossfreedom/indicator-sysmonitor  
-sudo apt-get update  
-sudo apt-get install -y indicator-sysmonitor
-indicator-sysmonitor &
-echo -e "\033[44;37m Please read the page: https://github.com/starFalll/Ubuntu_Init/blob/master/README.md#title-bar-network-speed-monitoring-software-configuration \033[0m"
-echo -e "Have you followed the instructions?(您已经按照说明更改配置了吗?)(Y/n) :\c"
-read result_5
-if [ "${result_5}" == "n" ] || [ "${result_5}" == "N" ]; then
-	echo -e "\033[44;37m Please follow the instructions. \033[0m"
-	echo -e "Continue?(Y/n) :\c"
-	read result_6
-	if [ "${result_6}" == "n" ] || ["${result_6}" == "N" ]; then
-		exit 0
-	fi
-fi
-
-sudo apt-get install -y unity-tweak-tool
-sudo add-apt-repository -y ppa:noobslab/themes
-sudo apt-get update
-sudo apt-get install -y flatabulous-theme
-sudo add-apt-repository -y ppa:noobslab/icons
-sudo apt-get update
-sudo apt-get install -y ultra-flat-icons
-echo -e "\033[44;37m Please read the page(请按照以下说明配置): https://github.com/starFalll/Ubuntu_Init/blob/master/README.md#system-landscaping \033[0m"
-echo -e "Have you followed the instructions?(您已经按照说明更改配置了吗?)(Y/n) :\c"
-read result_8
-if [ "${result_8}" == "n" ] || [ "${result_8}" == "N" ]; then
-        echo -e "\033[44;37m Please follow the instructions. \033[0m"
-	echo -e "Continue?(Y/n) :\c"
-        read result_9
-        if [ "${result_9}" == "N" ] || ["${result_9}" == "n" ]; then
-                exit 0
-        fi
 fi
 
 
